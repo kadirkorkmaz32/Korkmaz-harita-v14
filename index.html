@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Korkmaz Harita">
+<title>Korkmaz Harita Mühendislik</title>
+<link rel="manifest" href="manifest.json">
+<style>
+:root{--bg:#f3f4f6;--card:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--accent:#2563eb;--danger:#dc2626;--ok:#059669}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:22px 18px 16px;background:#111827;color:#fff;position:sticky;top:0;z-index:10}
+.brand{font-size:21px;font-weight:800}.sub{font-size:12px;opacity:.75;margin-top:3px}
+main{max-width:760px;margin:auto;padding:14px 14px 90px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 4px 16px #00000008}
+h2{font-size:18px;margin:0 0 12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:520px){.grid{grid-template-columns:1fr}}
+label{display:block;font-size:12px;font-weight:700;margin:8px 0 5px;color:#374151}input,select,textarea{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:12px;font-size:16px;background:#fff;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px #2563eb18}
+.phone-wrap{display:flex;align-items:center;border:1px solid #d1d5db;border-radius:12px;overflow:hidden;background:#fff}.phone-prefix{padding:12px 10px;font-weight:800;background:#f9fafb;border-right:1px solid #e5e7eb}.phone-wrap input{border:0;border-radius:0;box-shadow:none}.hint{font-size:11px;color:var(--muted);margin-top:4px}
+button{border:0;border-radius:12px;padding:12px 15px;font-weight:800;font-size:14px;cursor:pointer}.primary{background:var(--accent);color:#fff}.secondary{background:#e5e7eb;color:#111827}.danger{background:#fee2e2;color:#991b1b}.success{background:#d1fae5;color:#065f46}.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin:12px 0}.tab{background:#e5e7eb;color:#374151}.tab.active{background:#111827;color:#fff}
+.item{border:1px solid var(--line);border-radius:14px;padding:13px;margin:9px 0}.item-title{font-weight:800}.meta{font-size:12px;color:var(--muted);line-height:1.55;margin-top:5px}.price{font-size:18px;font-weight:900;margin-top:7px}
+.empty{text-align:center;color:var(--muted);padding:22px 5px}.top-actions{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:18px;z-index:30}.modal.show{display:flex}.modal-box{width:min(430px,100%);background:#fff;border-radius:20px;padding:18px}
+small.badge{display:inline-block;background:#eef2ff;color:#3730a3;padding:4px 8px;border-radius:99px;font-weight:800}
+footer{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);padding:9px 12px;text-align:center;font-size:11px;color:var(--muted);z-index:9}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Korkmaz Harita Mühendislik</div>
+  <div class="sub">Ölçüm • Müşteri • Fiyat Takip Uygulaması</div>
+</header>
+
+<main>
+  <div class="tabs">
+    <button class="tab active" data-tab="measurement">📐 Ölçüm</button>
+    <button class="tab" data-tab="people">👥 Ölçüm Kişileri</button>
+    <button class="tab" data-tab="quotes">💰 Fiyat Listesi</button>
+  </div>
+
+  <section id="measurement" class="panel">
+    <div class="card">
+      <div class="top-actions"><h2>Yeni Ölçüm / Fiyat</h2><small class="badge">Kayıt</small></div>
+      <div class="grid">
+        <div><label>Ad Soyad</label><input id="name" placeholder="Ad Soyad"></div>
+        <div><label>Telefon</label>
+          <div class="phone-wrap"><div class="phone-prefix">05</div><input id="phone" inputmode="numeric" maxlength="9" placeholder="XXXXXXXXX"></div>
+          <div class="hint">05 sabittir. Ardından tam 9 rakam girilebilir.</div>
+        </div>
+        <div><label>İl</label><input id="city" placeholder="İl"></div>
+        <div><label>İlçe</label><input id="district" placeholder="İlçe"></div>
+        <div><label>Mahalle</label><input id="neighborhood" placeholder="Mahalle"></div>
+        <div><label>Ada</label><input id="block" inputmode="numeric" placeholder="Ada"></div>
+        <div><label>Parsel</label><input id="parcel" inputmode="numeric" placeholder="Parsel"></div>
+        <div><label>Alan (m²)</label><input id="area" type="number" min="0" step="0.01" placeholder="0"></div>
+        <div><label>Koordinat Sayısı</label><input id="coord" type="number" min="0" step="1" placeholder="0"></div>
+        <div><label>Kilometre</label><input id="km" type="number" min="0" step="0.1" placeholder="0"></div>
+      </div>
+
+      <div class="card" style="background:#f9fafb;margin-top:14px">
+        <h2>Fiyat Hesabı</h2>
+        <div class="grid">
+          <div><label>Sabit Fiyat (TL)</label><input id="base" type="number" value="1500"></div>
+          <div><label>Alan Bedeli / 1000 m² (TL)</label><input id="areaRate" type="number" value="200"></div>
+          <div><label>Koordinat Başına (TL)</label><input id="coordRate" type="number" value="50"></div>
+          <div><label>Km Başına (TL)</label><input id="kmRate" type="number" value="5"></div>
+        </div>
+        <div class="price" id="total">Toplam: 1.500 TL</div>
+        <div class="hint">Alan bedeli her başlayan 1000 m² için uygulanır. Örn. 1001 m² = 2 × alan bedeli.</div>
+      </div>
+
+      <div class="row">
+        <button class="primary" id="saveMeasurement">💾 Ölçüm Kaydet</button>
+        <button class="success" id="saveQuote">💰 Fiyatı Kaydet</button>
+        <button class="secondary" id="clearForm">Temizle</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="people" class="panel hidden">
+    <div class="card">
+      <div class="top-actions"><h2>Ölçüm Yapılacak Kişiler</h2><small class="badge">Ayrı Sekme</small></div>
+      <div class="grid">
+        <div><label>Ad Soyad</label><input id="pName" placeholder="Ad Soyad"></div>
+        <div><label>Telefon</label>
+          <div class="phone-wrap"><div class="phone-prefix">05</div><input id="pPhone" inputmode="numeric" maxlength="9" placeholder="XXXXXXXXX"></div>
+        </div>
+        <div><label>İlişki / Not</label><input id="pNote" placeholder="Örn. komşu, müşteri, arsa sahibi"></div>
+      </div>
+      <div class="row"><button class="primary" id="addPerson">➕ Kişi Ekle</button></div>
+    </div>
+    <div class="card"><h2>Kişi Listesi</h2><div id="peopleList"></div></div>
+  </section>
+
+  <section id="quotes" class="panel hidden">
+    <div class="card">
+      <div class="top-actions"><h2>Normal Fiyat Listesi</h2><small class="badge">Ayrı Kayıt</small></div>
+      <div id="quotesList"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="top-actions"><h2>⚙️ Yönetici Ayarları</h2><button class="secondary" id="openSettings">Ayarları Aç</button></div>
+    <div class="hint">PIN değişikliği ana ekranda gösterilmez. Önce yönetici PIN'i doğrulanır.</div>
+  </section>
+</main>
+
+<footer>Korkmaz Harita Mühendislik • Veriler bu cihazda saklanır.</footer>
+
+<div class="modal" id="pinModal">
+  <div class="modal-box">
+    <h2>Yönetici PIN</h2>
+    <label>PIN</label><input id="pinInput" type="password" inputmode="numeric" maxlength="12" placeholder="PIN girin">
+    <div class="row"><button class="primary" id="verifyPin">Giriş</button><button class="secondary" id="closePin">Vazgeç</button></div>
+    <div class="hint">İlk kullanım PIN'i: 1234</div>
+  </div>
+</div>
+
+<div class="modal" id="settingsModal">
+  <div class="modal-box">
+    <h2>Yönetici Ayarları</h2>
+    <p>Yönetici alanına giriş yapıldı.</p>
+    <label>Yeni PIN</label><input id="newPin" type="password" inputmode="numeric" maxlength="12" placeholder="Yeni PIN">
+    <label>Yeni PIN Tekrar</label><input id="newPin2" type="password" inputmode="numeric" maxlength="12" placeholder="Yeni PIN tekrar">
+    <div class="row">
+      <button class="primary" id="changePin">PIN'i Değiştir</button>
+      <button class="secondary" id="closeSettings">Kapat</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const money = n => new Intl.NumberFormat('tr-TR',{style:'currency',currency:'TRY',maximumFractionDigits:0}).format(n||0);
+
+function cleanDigits(v,max){return String(v||'').replace(/\D/g,'').slice(0,max)}
+function phoneValue(input){input.value=cleanDigits(input.value,9)}
+$('phone').addEventListener('input',()=>phoneValue($('phone')));
+$('pPhone').addEventListener('input',()=>phoneValue($('pPhone')));
+
+const KEY = {
+  measurements:'kh_measurements_v12',
+  quotes:'kh_quotes_v12',
+  people:'kh_people_v12',
+  pin:'kh_admin_pin_v12'
+};
+const get=(k,d=[])=>JSON.parse(localStorage.getItem(k)||JSON.stringify(d));
+const set=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+
+if(!localStorage.getItem(KEY.pin)) localStorage.setItem(KEY.pin,'1234');
+
+function calc(){
+  const base=+($('base').value||0), area=+($('area').value||0), coord=+($('coord').value||0), km=+($('km').value||0);
+  const areaRate=+($('areaRate').value||0), coordRate=+($('coordRate').value||0), kmRate=+($('kmRate').value||0);
+  const areaUnits=area>0?Math.ceil(area/1000):0;
+  const total=base+(areaUnits*areaRate)+(coord*coordRate)+(km*kmRate);
+  $('total').textContent='Toplam: '+money(total);
+  return {base,area,coord,km,areaRate,coordRate,kmRate,total};
+}
+['base','area','coord','km','areaRate','coordRate','kmRate'].forEach(id=>$(id).addEventListener('input',calc));
+calc();
+
+document.querySelectorAll('.tab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(x=>x.classList.add('hidden'));
+    btn.classList.add('active'); $(btn.dataset.tab).classList.remove('hidden');
+    render();
+  });
+});
+
+function formData(){
+  const c=calc();
+  return {
+    id:Date.now(), date:new Date().toLocaleString('tr-TR'),
+    name:$('name').value.trim(), phone:'05'+cleanDigits($('phone').value,9),
+    city:$('city').value.trim(), district:$('district').value.trim(),
+    neighborhood:$('neighborhood').value.trim(), block:$('block').value.trim(),
+    parcel:$('parcel').value.trim(), ...c
+  };
+}
+function validatePersonData(d){
+  if(!d.name) return 'Ad Soyad girin.';
+  if(d.phone.length!==11) return 'Telefon numarası 05 ile birlikte 11 haneli olmalı.';
+  return '';
+}
+function validateMeasurement(d){
+  if(!d.name) return 'Ad Soyad girin.';
+  if(d.phone.length!==11) return 'Telefon numarası 05 ile birlikte 11 haneli olmalı.';
+  return '';
+}
+function saveMeasurement(){
+  const d=formData(), err=validateMeasurement(d); if(err){alert(err);return}
+  const a=get(KEY.measurements); a.unshift(d); set(KEY.measurements,a);
+  alert('Ölçüm kaydedildi.'); clearForm(); render();
+}
+function saveQuote(){
+  const d=formData(), err=validateMeasurement(d); if(err){alert(err);return}
+  const a=get(KEY.quotes); a.unshift(d); set(KEY.quotes,a);
+  alert('Normal fiyat listesine kaydedildi.'); render();
+}
+$('saveMeasurement').onclick=saveMeasurement;
+$('saveQuote').onclick=saveQuote;
+
+function clearForm(){
+  ['name','phone','city','district','neighborhood','block','parcel','area','coord','km'].forEach(id=>$(id).value='');
+  calc();
+}
+$('clearForm').onclick=clearForm;
+
+$('addPerson').onclick=()=>{
+  const name=$('pName').value.trim(), phone='05'+cleanDigits($('pPhone').value,9), note=$('pNote').value.trim();
+  if(!name){alert('Ad Soyad girin.');return}
+  if(phone.length!==11){alert('Telefon numarası 05 ile birlikte 11 haneli olmalı.');return}
+  const a=get(KEY.people); a.unshift({id:Date.now(),name,phone,note,date:new Date().toLocaleString('tr-TR')});set(KEY.people,a);
+  $('pName').value='';$('pPhone').value='';$('pNote').value='';render();
+};
+
+function del(key,id){if(confirm('Bu kaydı silmek istiyor musunuz?')){set(key,get(key).filter(x=>x.id!==id));render()}}
+function renderPeople(){
+  const a=get(KEY.people);
+  $('peopleList').innerHTML=a.length?a.map(x=>`<div class="item"><div class="item-title">${esc(x.name)}</div><div class="meta">📞 ${esc(x.phone)}<br>📝 ${esc(x.note||'Not yok')}<br>🕒 ${esc(x.date)}</div><div class="row"><button class="danger" onclick="del('${KEY.people}',${x.id})">Sil</button></div></div>`).join(''):'<div class="empty">Henüz ölçüm yapılacak kişi eklenmedi.</div>';
+}
+function renderQuotes(){
+  const a=get(KEY.quotes);
+  $('quotesList').innerHTML=a.length?a.map(x=>`<div class="item"><div class="item-title">${esc(x.name)}</div><div class="meta">📞 ${esc(x.phone)}<br>📍 ${esc([x.city,x.district,x.neighborhood].filter(Boolean).join(' / '))}<br>🗺️ Ada ${esc(x.block||'-')} / Parsel ${esc(x.parcel||'-')}<br>📏 ${x.area} m² • ${x.coord} koordinat • ${x.km} km<br>🕒 ${esc(x.date)}</div><div class="price">${money(x.total)}</div><div class="row"><button class="danger" onclick="del('${KEY.quotes}',${x.id})">Sil</button></div></div>`).join(''):'<div class="empty">Henüz normal fiyat kaydı yok.</div>';
+}
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function render(){renderPeople();renderQuotes()}
+
+$('openSettings').onclick=()=>{$('pinInput').value='';$('pinModal').classList.add('show');$('pinInput').focus()}
+$('closePin').onclick=()=>$('pinModal').classList.remove('show');
+$('verifyPin').onclick=()=>{
+  if($('pinInput').value===localStorage.getItem(KEY.pin)){
+    $('pinModal').classList.remove('show');$('settingsModal').classList.add('show');
+  }else alert('PIN hatalı.');
+};
+$('closeSettings').onclick=()=>$('settingsModal').classList.remove('show');
+$('changePin').onclick=()=>{
+  const a=$('newPin').value,b=$('newPin2').value;
+  if(a.length<4){alert('PIN en az 4 haneli olmalı.');return}
+  if(a!==b){alert('PINler eşleşmiyor.');return}
+  localStorage.setItem(KEY.pin,a);$('newPin').value='';$('newPin2').value='';
+  alert('PIN başarıyla değiştirildi.');$('settingsModal').classList.remove('show');
+};
+
+render();
+</script>
+</body>
+</html>
